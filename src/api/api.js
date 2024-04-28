@@ -8,7 +8,7 @@ export const Api = createApi({
   endpoints: (builder) => ({
     getUsersInfo: builder.query({
       query: ({ username, pages }) =>
-        `search/users?q=${username}`,
+      `search/users?q=${username}&sort=repositories&order=desc&page=${pages ? pages : 1}`,
     }),
     getUsersIncrease: builder.query({
       query: ({ username, pages }) =>
