@@ -6,16 +6,16 @@ export const Api = createApi({
     baseUrl: "https://api.github.com/",
   }),
   endpoints: (builder) => ({
-    getUserInfo: builder.query({
+    getUsersInfo: builder.query({
       query: ({ username, pages }) =>
-        `search/users?q=${username}&sort=repositories&order=desc&page=${pages ? pages : 1}`,
+        `search/users?q=${username}`,
     }),
-    getUserIncrease: builder.query({
+    getUsersIncrease: builder.query({
       query: ({ username, pages }) =>
         `search/users?q=${username}&sort=repositories&order=asc&page=${pages ? pages : 1}`,
     }),
-    hetUserData: builder.query({
-      query: ({ username }) => {
+    getUserData: builder.query({
+      query: (username) => {
         if (username) {
           return `users/${username}`;
         } else {
