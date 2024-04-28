@@ -1,6 +1,10 @@
+import { useDispatch, useSelector } from "react-redux";
 import * as S from "./styles";
+import { useState } from "react";
 
 export const MainPage = () => {
+
+
   return (
     <S.Wrapper>
       <S.SearchForm>
