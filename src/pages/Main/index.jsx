@@ -7,6 +7,7 @@ import {
 } from "../../store/slice/userSlice";
 import { useGetUsersIncreaseQuery, useGetUsersInfoQuery } from "../../api/api";
 import { UserList } from "../../components/userList";
+import { isImmutableDefault } from "@reduxjs/toolkit";
 
 export const MainPage = () => {
   const dispatch = useDispatch();
@@ -33,55 +34,60 @@ export const MainPage = () => {
     dispatch(updatingUserNameInput(userNameInput));
   }, [dispatch, userNameInput]);
 
-  const { data, error, isLoading } = useGetUsersIncreaseQuery();
+  const { data, isLoading, error } = useGetUsersIncreaseQuery(setData, {
+    skip: !pass,
+    onSuccess: () => {
+      setPass(false);
+    },
+  });
 
-  // useEffect(() => {
-  //   if (data && !isLoading) {
-  //     dispatch(searchingUser(data));
-  //   }
-  // }, [data, isLoading]);
+  useEffect(() => {
+    if (data && !isLoading) {
+      dispatch(searchingUser(data));
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     if (error.status === 403) {
-  //       showMessage("Произошла ошибка. Попробуйте позже.");
-  //     } else {
-  //       showMessage("Произошла ошибка. Попробуйте позже.");
-  //     }
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      if (error.status === 403) {
+        showMessage("Произошла ошибка. Попробуйте позже.");
+      } else {
+        showMessage("Произошла ошибка. Попробуйте позже.");
+      }
+    }
+  }, [error]);
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  //   setUsername(userNameInput);
-  //   dispatch(updatingUserNameInput(userNameInput));
-  //   setPass(true);
-  // };
+    setUsername(userNameInput);
+    dispatch(updatingUserNameInput(userNameInput));
+    setPass(true);
+  };
 
-  // useEffect(() => {
-  //   if (data && !isLoading) {
-  //     dispatch(searchingUser(data));
-  //   }
-  // }, [data, isLoading]);
+  useEffect(() => {
+    if (data && !isLoading) {
+      dispatch(searchingUser(data));
+    }
+  }, [data, isLoading]);
 
-  // const handleInputChange = (event) => {
-  //   dispatch(updatingUserNameInput(event.target.value));
-  // };
+  const handleInputChange = (event) => {
+    dispatch(updatingUserNameInput(event.target.value));
+  };
 
-  // const handleIncrease = (event) => {
-  //   event.preventDefault();
-  //   setIncrease(true);
-  //   setActiveButton("increasing");
-  //   setPass(true);
-  // };
+  const handleIncrease = (event) => {
+    event.preventDefault();
+    setIncrease(true);
+    setActiveButton("increasing");
+    setPass(true);
+  };
 
-  // const handleIncreasingBtn = (event) => {
-  //   event.preventDefault();
-  //   setIncrease(false);
-  //   setActiveButton("decreading");
-  //   setPass(true);
-  // };
+  const handleIncreasingBtn = (event) => {
+    event.preventDefault();
+    setIncrease(false);
+    setActiveButton("decreading");
+    setPass(true);
+  };
 
   return (
     <S.Wrapper>
@@ -90,24 +96,33 @@ export const MainPage = () => {
           value={userNameInput}
           placeholder="Введите логин пользователя"
           type="search"
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
         ></S.SearchLoginInput>
-        <S.SearchButton
-        // onClick={handleSubmit} disabled={isLoading}
-        >
-          {/* {isLoading ? "Ищем" : "Искать"} */}
-          Искать
+        <S.SearchButton onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? "Ищем" : "Искать"}
         </S.SearchButton>
       </S.SearchForm>
       <S.ButtonBox>
         <p>сортировать по:</p>
-        <S.ButtonRegulat>по возрастанию</S.ButtonRegulat>
+        <S.ButtonRegulat
+          onClick={handleIncrease}
+          className={activeButton === "increasing" ? "active" : ""}
+          data-isactive={activeButton === "increasing"}
+        >
+          по возрастанию
+        </S.ButtonRegulat>
 
-        <S.ButtonRegulat>по убыванию</S.ButtonRegulat>
+        <S.ButtonRegulat
+          onClick={handleIncreasingBtn}
+          className={activeButton === "decreasing" ? "active" : ""}
+          data-isactive={activeButton === "decreasing"}
+        >
+          по убыванию
+        </S.ButtonRegulat>
       </S.ButtonBox>
       {message && <S.Message>{message}</S.Message>}
       <S.UserlistContent>
-        <UserList users={users} userNameInput={userNameInput}/>
+        <UserList users={users} userNameInput={userNameInput} />
       </S.UserlistContent>
     </S.Wrapper>
   );

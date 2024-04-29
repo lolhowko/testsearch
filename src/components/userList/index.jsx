@@ -3,16 +3,16 @@ import * as S from "./styles";
 import { useState } from "react";
 import { getUsersRepos } from "../../api/api";
 
-export const UserList = ({ userNameInput }) => {
-  const users = useSelector((state) => state.users.users);
-  console.log(users);
-  
+export const UserList = ({ userNameInput, users }) => {
+
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [repos, setRepos] = useState([]);
 
   if (!users || !users.items) return "";
   if (users.total_count === 0) return <>Пользователя с таким именем нет</>;
+
+  console.log(users.items);
 
   const openModal = async (user) => {
     setSelectedUser(user);
@@ -29,9 +29,9 @@ export const UserList = ({ userNameInput }) => {
 
   return (
     <>
-      {users.items.map((user, index) => {
+      {users.items.map((user, index) => (
         <S.UserList key={index}>
-          <S.UserListItem onClick={openModal(user)}>
+          <S.UserListItem onClick={() => openModal(user)}>
             <S.UserListImage>
               <S.UserListImg src={user.avatar_url} alt="picture" />
             </S.UserListImage>
@@ -39,11 +39,11 @@ export const UserList = ({ userNameInput }) => {
               <S.UserListName>{user.login}</S.UserListName>
             </S.UserListContent>
           </S.UserListItem>
-        </S.UserList>;
-        {
-          // isModalOpen && selectedUser && ( );
-        }
-      })}
+        </S.UserList>
+      ))}
+      {/* {isModalOpen && selectedUser && (
+        <Modal user={selectedUser} onClose={closeModal} repos={repos} />
+      )} */}
     </>
   );
 };

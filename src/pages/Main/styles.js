@@ -43,7 +43,7 @@ export const SearchButton = styled.button`
   }
 
   @media screen and (max-width: ${modileWidth}) {
-    margin-top: 20px;
+    margin-top: 10px;
   }
 `;
 
@@ -63,9 +63,9 @@ export const ButtonBox = styled.div`
   align-items: center;
 
   @media screen and (max-width: ${modileWidth}) {
-    margin-top: 10px;
+    margin-top: 15px;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
   }
 `;
 
@@ -78,7 +78,7 @@ export const ButtonRegulat = styled.button`
   border: 0;
   font-size: 14px;
   font-style: normal;
-  
+
   &:active {
     background-color: dark grey;
     color: white;
@@ -89,15 +89,18 @@ export const ButtonRegulat = styled.button`
     transform: scale(1.05);
   }
 `;
+
 export const UserlistContent = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   max-width: 100vh;
   width: 100%;
-  grid-gap: 40px 26px;
+  grid-gap: 43px 26px;
   justify-content: center;
   padding-bottom: 40px;
+
+  margin-left: 15%;
 
   &::-webkit-scrollbar {
     width: 0px;
@@ -107,6 +110,10 @@ export const UserlistContent = styled.div`
   &::-webkit-scrollbar-thumb {
     background-color: #0080c1;
     border-radius: 3px;
+  }
+
+  @media screen and (max-width: ${modileWidth}) {
+    margin-left: 0;
   }
 `;
 
