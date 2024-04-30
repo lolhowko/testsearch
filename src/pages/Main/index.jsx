@@ -55,6 +55,8 @@ export const MainPage = () => {
       {startSearch && !errorText ? (
         isLoading ? (
           <p>Подождите, ищем совпадения...</p>
+        ) : userData.total_count === 0 ? (
+          <S.Message>Нет пользователей с таким логином</S.Message>
         ) : (
           <>
             <ReposOrderComponent
