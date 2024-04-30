@@ -5,46 +5,24 @@ const modileWidth = "620px";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  aligh-items: center;
+  align-items: center;
+  gap: 10px;
 `;
 
-export const SearchForm = styled.form`
+export const MainTitle = styled.h1`
+  margin: 15px 0px;
+`;
+
+export const Message = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 30px;
-
-  @media screen and (max-width: ${modileWidth}) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-`;
-
-export const SearchButton = styled.button`
-  width: 100px;
-  heith: 30px;
-  background-color: transparent;
-  border-radius: 6px;
-  color: black;
+  color: red;
+  color: #7f00ff;
   font-size: 18px;
-  font-style: normal;
-  margin-left: 20px;
-
-  &:hover {
-    background-color: grey;
-    color: white;
-    transform: scale(1.05);
-  }
+  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
 
   @media screen and (max-width: ${modileWidth}) {
-    margin-top: 20px;
+    font-size: 12px;
   }
-`;
-
-export const SearchLoginInput = styled.input`
-  width: 300px;
-  height: 30px;
-  border-radius: 6px;
-  padding-left: 10px;
 `;
