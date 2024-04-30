@@ -1,129 +1,71 @@
-import { useDispatch, useSelector } from "react-redux";
-import * as S from "./styles";
+import * as S from "./styles"
 import { useEffect, useState } from "react";
-import {
-  searchingUser,
-  updatingUserNameInput,
-} from "../../store/slice/userSlice";
-import { useGetUsersIncreaseQuery, useGetUsersInfoQuery } from "../../api/api";
-import { UserList } from "../../components/userList";
-import { isImmutableDefault } from "@reduxjs/toolkit";
+import { useGetUserQuery } from "../../api/api";
+import { UsersList } from "../../components/userList";
+import { ReposOrderComponent } from "../../components/repos-order/repos-order";
+import { Search } from "../../components/search/search";
 
 export const MainPage = () => {
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.users);
-  const userNameInput = useSelector((state) => state.users.userNameInput);
+  const [searchText, setSearchText] = useState("");
+  const [startSearch, setStartSearch] = useState(false);
+  const [errorText, setErrorText] = useState(null);
 
-  const [username, setUsername] = useState(userNameInput || "");
-  const [pages, setPages] = useState(1);
-  const [isIncrease, setIncrease] = useState(true);
-  const [activeButton, setActiveButton] = useState("increasing");
-  const [message, setMessage] = useState(null);
-  const [pass, setPass] = useState(false);
+  const [reposOrder, setReposOrder] = useState("desc");
+  const [chosenButton, setChosenButton] = useState("по убыванию");
 
-  const setData = { username, pages };
+  const [perPage, setPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const showMessage = (text, duration = 2000) => {
-    setMessage(text);
-    setTimeout(() => {
-      setMessage(null);
-    }, duration);
-  };
-
-  useEffect(() => {
-    dispatch(updatingUserNameInput(userNameInput));
-  }, [dispatch, userNameInput]);
-
-  const { data, isLoading, error } = useGetUsersIncreaseQuery(setData, {
-    skip: !pass,
-    onSuccess: () => {
-      setPass(false);
-    },
+  const {
+    data: userData,
+    error: userDataError,
+    isLoading,
+  } = useGetUserQuery({
+    userLogin: searchText,
+    per_page: perPage,
+    page: currentPage,
+    order: reposOrder,
   });
 
   useEffect(() => {
-    if (data && !isLoading) {
-      dispatch(searchingUser(data));
+    if (userDataError?.status === 422) {
+      setErrorText("Для начала работы введите Ваш запрос в строку поиска");
+    } else if (userDataError?.status === 403) {
+      setErrorText("Произошла ошибка, попробуйте еще раз");
+    } else {
+      setErrorText(null);
     }
-  }, [data]);
 
-  useEffect(() => {
-    if (error) {
-      if (error.status === 403) {
-        showMessage("Произошла ошибка. Попробуйте позже.");
-      } else {
-        showMessage("Произошла ошибка. Попробуйте позже.");
-      }
-    }
-  }, [error]);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    setUsername(userNameInput);
-    dispatch(updatingUserNameInput(userNameInput));
-    setPass(true);
-  };
-
-  useEffect(() => {
-    if (data && !isLoading) {
-      dispatch(searchingUser(data));
-    }
-  }, [data, isLoading]);
-
-  const handleInputChange = (event) => {
-    dispatch(updatingUserNameInput(event.target.value));
-  };
-
-  const handleIncrease = (event) => {
-    event.preventDefault();
-    setIncrease(true);
-    setActiveButton("increasing");
-    setPass(true);
-  };
-
-  const handleIncreasingBtn = (event) => {
-    event.preventDefault();
-    setIncrease(false);
-    setActiveButton("decreading");
-    setPass(true);
-  };
+    setPerPage(10);
+    setChosenButton("по убыванию");
+  }, [userDataError, setPerPage, setChosenButton]);
 
   return (
     <S.Wrapper>
-      <S.SearchForm>
-        <S.SearchLoginInput
-          value={userNameInput}
-          placeholder="Введите логин пользователя"
-          type="search"
-          onChange={handleInputChange}
-        ></S.SearchLoginInput>
-        <S.SearchButton onClick={handleSubmit} disabled={isLoading}>
-          {isLoading ? "Ищем" : "Искать"}
-        </S.SearchButton>
-      </S.SearchForm>
-      <S.ButtonBox>
-        <p>сортировать по:</p>
-        <S.ButtonRegulat
-          onClick={handleIncrease}
-          className={activeButton === "increasing" ? "active" : ""}
-          data-isactive={activeButton === "increasing"}
-        >
-          по возрастанию
-        </S.ButtonRegulat>
+      <Search
+        searchText={searchText}
+        setSearchText={setSearchText}
+        setStartSearch={setStartSearch}
+        isLoading={isLoading}
+      />
 
-        <S.ButtonRegulat
-          onClick={handleIncreasingBtn}
-          className={activeButton === "decreasing" ? "active" : ""}
-          data-isactive={activeButton === "decreasing"}
-        >
-          по убыванию
-        </S.ButtonRegulat>
-      </S.ButtonBox>
-      {message && <S.Message>{message}</S.Message>}
-      <S.UserlistContent>
-        <UserList users={users} userNameInput={userNameInput} />
-      </S.UserlistContent>
+      {startSearch && !errorText ? (
+        isLoading ? (
+          <p>Подождите, ищем совпадения...</p>
+        ) : (
+          <>
+            <ReposOrderComponent
+              setReposOrder={setReposOrder}
+              setChosenButton={setChosenButton}
+              chosenButton={chosenButton}
+            />
+
+            <UsersList userData={userData} />
+          </>
+        )
+      ) : (
+        <S.Message>{errorText}</S.Message>
+      )}
     </S.Wrapper>
   );
 };

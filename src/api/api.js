@@ -1,45 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: "https://api.github.com",
+  headers: {
+    "X-GitHub-Api-Version": "2022-11-28",
+    Accept: "application/vnd.github.text-match+json",
+    // "Authorization": `Bearer ${process.env.GITHUB_TOKEN}`
+  },
+})
+
 export const Api = createApi({
   reducerPath: "Api",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.github.com/",
-  }),
+  baseQuery,
   endpoints: (builder) => ({
-    getUsersInfo: builder.query({
-      query: ({ username, pages }) =>
-      `search/users?q=${username}&sort=repositories&order=desc&page=${pages ? pages : 1}`,
+    getUser: builder.query({
+      query: ({ userLogin, per_page, page, order }) =>
+        `/search/users?q=${userLogin}+in:login&sort=repositories&order=${order}&per_page=${per_page}&page=${page}`,
     }),
-    getUsersIncrease: builder.query({
-      query: ({ username, pages }) =>
-        `search/users?q=${username}&sort=repositories&order=asc&page=${pages ? pages : 1}`,
+    getCurrentUser: builder.query({
+      query: ({ userLogin }) => `users/${userLogin}`,
     }),
-    getUserData: builder.query({
-      query: (username) => {
-        if (username) {
-          return `users/${username}`;
-        } else {
-          return "";
-        }
-      },
-    }),
+   
   }),
-});
-
-export async function getUsersRepos(username) {
-  const response = await fetch(
-    `https://api.github.com/users/${username}/repos`,
-  );
-
-  if (!response.ok) {
-    throw new Error("Ошибка сервера");
-  }
-  const repositories = await response.json();
-  return repositories;
-}
+})
 
 export const {
-  useGetUsersInfoQuery,
-  useGetUsersIncreaseQuery,
-  useGetUserDataQuery,
-} = Api;
+  useGetUserQuery,
+  useGetCurrentUserQuery
+} = Api
