@@ -4,6 +4,7 @@ import { useGetUserQuery } from "../../api/api";
 import { UsersList } from "../../components/userList";
 import { ReposOrderComponent } from "../../components/repos-order/repos-order";
 import { Search } from "../../components/search/search";
+import { ElamentPerPage } from "../../components/per-page/per-page";
 
 export const MainPage = () => {
   const [searchText, setSearchText] = useState("");
@@ -62,6 +63,11 @@ export const MainPage = () => {
             />
 
             <UsersList userData={userData} />
+
+            <ElamentPerPage 
+            perPage={perPage}
+            setPerPage={setPerPage}
+            setCurrentPage={setCurrentPage}/>
           </>
         )
       ) : (
