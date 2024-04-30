@@ -1,6 +1,6 @@
 import { useGetCurrentUserQuery } from "../../api/api";
 import * as S from "./styles";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export const UserPage = () => {
   const { userId } = useParams();
@@ -16,9 +16,9 @@ export const UserPage = () => {
   console.log(currentUserData);
 
   return (
-    <>
+    <S.Wrapper>
       {error === undefined ? (
-        <S.Wrapper>
+        <>
           <S.UserPageTittle>
             Информация о <S.UserPageTittleName>{userId}</S.UserPageTittleName>
           </S.UserPageTittle>
@@ -86,10 +86,14 @@ export const UserPage = () => {
               </S.UserDataTextSpan>
             </S.UserDataText>
           </S.UserContent>
-        </S.Wrapper>
+        </>
       ) : (
         <S.Message> Пользователь не найден </S.Message>
       )}
-    </>
+
+      <Link to="/">
+        <S.UserLink>На главную</S.UserLink>
+      </Link>
+    </S.Wrapper>
   );
 };

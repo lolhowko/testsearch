@@ -79,3 +79,30 @@ export const Message = styled.div`
     font-size: 12px;
   }
 `;
+
+export const UserLink = styled.button`
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: none;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.03);
+    background-color: #009ee4;
+  }
+
+  &:active {
+    background-color: #0080c1;
+  }
+
+  @media screen and (max-width: ${modileWidth}) {
+    font-weight: 300;
+    font-size: 12px;
+  }
+`;
