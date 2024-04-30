@@ -1,10 +1,11 @@
-import * as S from "./styles"
+import * as S from "./styles";
 import { useEffect, useState } from "react";
 import { useGetUserQuery } from "../../api/api";
 import { UsersList } from "../../components/userList";
 import { ReposOrderComponent } from "../../components/repos-order/repos-order";
 import { Search } from "../../components/search/search";
 import { ElamentPerPage } from "../../components/per-page/per-page";
+import { Pagination } from "../../components/pagination/pagination";
 
 export const MainPage = () => {
   const [searchText, setSearchText] = useState("");
@@ -43,7 +44,7 @@ export const MainPage = () => {
 
   return (
     <S.Wrapper>
-       <S.MainTitle>Поиск пользователей GitHub</S.MainTitle>
+      <S.MainTitle>Поиск пользователей GitHub</S.MainTitle>
       <Search
         searchText={searchText}
         setSearchText={setSearchText}
@@ -64,10 +65,18 @@ export const MainPage = () => {
 
             <UsersList userData={userData} />
 
-            <ElamentPerPage 
-            perPage={perPage}
-            setPerPage={setPerPage}
-            setCurrentPage={setCurrentPage}/>
+            <ElamentPerPage
+              perPage={perPage}
+              setPerPage={setPerPage}
+              setCurrentPage={setCurrentPage}
+            />
+
+            <Pagination
+              userData={userData}
+              perPage={perPage}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
           </>
         )
       ) : (
