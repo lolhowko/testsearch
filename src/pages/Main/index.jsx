@@ -42,6 +42,7 @@ export const MainPage = () => {
 
   return (
     <S.Wrapper>
+       <S.MainTitle>Поиск пользователей GitHub</S.MainTitle>
       <Search
         searchText={searchText}
         setSearchText={setSearchText}

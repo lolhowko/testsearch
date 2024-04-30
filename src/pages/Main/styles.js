@@ -9,6 +9,10 @@ export const Wrapper = styled.div`
   gap: 10px;
 `;
 
+export const MainTitle = styled.h1`
+  margin: 15px 0px;
+`;
+
 export const Message = styled.div`
   display: flex;
   color: red;
