@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { useEffect, useState } from "react";
 import { useGetUserQuery } from "../../api/api";
-import { UsersList } from "../../components/userList";
+import { UsersList } from "../../components/userList/userList";
 import { ReposOrderComponent } from "../../components/repos-order/repos-order";
 import { Search } from "../../components/search/search";
 import { ElamentPerPage } from "../../components/per-page/per-page";
@@ -54,7 +54,7 @@ export const MainPage = () => {
 
       {startSearch && !errorText ? (
         isLoading ? (
-          <p>Подождите, ищем совпадения...</p>
+          <S.Message>Подождите, ищем совпадения...</S.Message>
         ) : (
           <>
             <ReposOrderComponent
