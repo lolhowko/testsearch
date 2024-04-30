@@ -80,6 +80,7 @@ export const Message = styled.div`
   flex-wrap: nowrap;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   @media screen and (max-width: ${modileWidth}) {
     font-size: 12px;
