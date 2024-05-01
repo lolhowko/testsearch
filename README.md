@@ -36,3 +36,6 @@ React Router
    npm run start
 
 4. Проект будет запущен по адресу: http://localhost:3000
+
+так же можно запустить деплой проекта по ссылке: 
+https://master--loltestsearch.netlify.app/
